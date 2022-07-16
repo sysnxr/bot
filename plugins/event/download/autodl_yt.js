@@ -1,6 +1,5 @@
 const { decode } = require('html-entities')
-const { yta, ytv } = require('../../../lib/y2mate')
-const yt = require('youtube-sr').default
+const { ytv } = require('../../../lib/y2mate')
 exports.run = {
    regex: /^(?:https?:\/\/)?(?:www\.|m\.|music\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?/,
    async: async (m, {
@@ -25,18 +24,20 @@ exports.run = {
                let old = new Date()
                Func.hitstat('ytmp4', m.sender)
                links.map(async link => {
-                  let json = await yt.getVideo(link)
-                  if (!json) return client.reply(m.chat, `${global.status.fail} : [ ${link} ]`, m)
                   const {
                      dl_link,
                      thumb,
                      title,
+                     duration,
                      filesizeF
                   } = await ytv(link)
-                  let caption = `◦  *Title* : ${decode(title)}\n`
-                  caption += `◦  *Size* : ${filesizeF}\n`
-                  caption += `◦  *Duration* : ${json.durationFormatted}\n`
-                  caption += `◦  *Quality* : 480p`
+                  if (!dl_link) return client.reply(m.chat, `${global.status.fail} : [ ${link} ]`, m)
+                  let caption = `乂  *Y T - M P 4*\n\n`
+                  caption += `	◦  *Title* : ${decode(title)}\n`
+                  caption += `	◦  *Size* : ${filesizeF}\n`
+                  caption += `	◦  *Duration* : ${duration}\n`
+                  caption += `	◦  *Quality* : 480p\n\n`
+                  caption += global.footer
                   let chSize = Func.sizeLimit(filesizeF, global.max_upload)
                   if (chSize.oversize) return client.reply(m.chat, `💀 File size (${filesizeF}) exceeds the maximum limit, download it by yourself via this link : ${await (await scrap.shorten(dl_link)).data.url}`, m)
                   let isSize = (filesizeF).replace(/MB/g, '').trim()
