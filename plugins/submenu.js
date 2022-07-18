@@ -11,6 +11,7 @@ exports.run = {
       if (option == 3) return client.reply(m.chat, submenu3(isPrefix), m)
       if (option == 4) return client.reply(m.chat, submenu4(isPrefix), m)
       if (option == 5) return client.reply(m.chat, submenu5(isPrefix), m)
+      if (option == 6) return client.reply(m.chat, submenu6(isPrefix), m)
    },
    error: false
 }
@@ -26,7 +27,8 @@ const submenu1 = prefix => {
 ◦  ${prefix}tikwm *link*
 ◦  ${prefix}twitter *link*
 ◦  ${prefix}ytmp3 *link*
-◦  ${prefix}ytmp4 *link*`
+◦  ${prefix}ytmp4 *link*
+◦  ${prefix}video *query*`
 }
 
 const submenu2 = prefix => {
@@ -59,12 +61,19 @@ const submenu4 = prefix => {
 ◦  ${prefix}q *reply chat*
 ◦  ${prefix}run
 ◦  ${prefix}response *url*
-◦  ${prefix}sticker *reply media*`
+◦  ${prefix}sticker *reply media*
+◦  ${prefix}swm *packname | author*
+◦  ${prefix}take *packname | author*
+◦  ${prefix}toimg *reply sticker*
+◦  ${prefix}tomp3 *reply video*
+◦  ${prefix}tovn *reply audio / video*`
 }
 
 const submenu5 = prefix => {
    return `◦  ${prefix}autodownload *on / off*
 ◦  ${prefix}autoread *on / off*
+◦  ${prefix}bc *text or reply media*
+◦  ${prefix}bcgc *text or reply media*
 ◦  ${prefix}backup
 ◦  ${prefix}ban *mention or reply*
 ◦  ${prefix}unban *mention or reply*
@@ -86,6 +95,7 @@ const submenu5 = prefix => {
 ◦  ${prefix}plugen *plugin*
 ◦  ${prefix}plugdis *plugin*
 ◦  ${prefix}join *link*
+◦  ${prefix}reset
 ◦  ${prefix}restart
 ◦  ${prefix}self *on / off*
 ◦  ${prefix}setpp *reply photo*
@@ -96,4 +106,12 @@ const submenu5 = prefix => {
 ◦  ${prefix}online *on / off*
 ◦  ${prefix}-owner *mention or reply*
 ◦  ${prefix}+owner *mention or reply*`
+}
+
+const submenu6 = prefix => {
+   return `◦  ${prefix}botstat
+◦  ${prefix}hitstat
+◦  ${prefix}list
+◦  ${prefix}owner
+◦  ${prefix}premium`
 }

@@ -1,10 +1,14 @@
 exports.run = {
-   usage: ['s', 'sk', 'stiker', 'sticker', 'sgif'],
+   usage: ['swm'],
    async: async (m, {
-      client
+      client,
+      text,
+      isPrefix,
+      command
    }) => {
       try {
-         let exif = global.db.setting
+         let [packname, ...author] = text.split`|`
+         author = (author || []).join`|`
          if (m.quoted ? m.quoted.message : m.msg.viewOnce) {
             let type = m.quoted ? Object.keys(m.quoted.message)[0] : m.mtype
             let q = m.quoted ? m.quoted.message[type] : m.msg
@@ -12,13 +16,13 @@ exports.run = {
             if (/video/.test(type)) {
                if (q.seconds > 10) return client.reply(m.chat, Func.texted('bold', `🚩 Maximum video duration is 10 seconds.`), m)
                return await client.sendSticker(m.chat, img, m, {
-                  packname: exif.sk_pack,
-                  author: exif.sk_author
+                  packname: packname || '',
+                  author: author || ''
                })
             } else if (/image/.test(type)) {
                return await client.sendSticker(m.chat, img, m, {
-                  packname: exif.sk_pack,
-                  author: exif.sk_author
+                  packname: packname || '',
+                  author: author || ''
                })
             }
          } else {
@@ -28,23 +32,24 @@ exports.run = {
                let img = await q.download()
                if (!img) return client.reply(m.chat, global.status.wrong, m)
                return await client.sendSticker(m.chat, img, m, {
-                  packname: exif.sk_pack,
-                  author: exif.sk_author
+                  packname: packname || '',
+                  author: author || ''
                })
             } else if (/video/.test(mime)) {
                if ((q.msg || q).seconds > 10) return client.reply(m.chat, Func.texted('bold', `🚩 Maximum video duration is 10 seconds.`), m)
                let img = await q.download()
                if (!img) return client.reply(m.chat, global.status.wrong, m)
                return await client.sendSticker(m.chat, img, m, {
-                  packname: exif.sk_pack,
-                  author: exif.sk_author
+                  packname: packname || '',
+                  author: author || ''
                })
-            } else client.reply(m.chat, Func.texted('bold', `Stress ??`), m)
+            } else client.reply(m.chat, `🚩 To create a watermark on sticker reply media photo or video and use this format *${isPrefix + command} packname | author*`, m)
          }
       } catch (e) {
          console.log(e)
-         return client.reply(m.chat, Func.jsonFormat(e), m)
+         return client.reply(m.chat, global.status.error, m)
       }
    },
-   error: false
+   cache: true,
+   location: __filename
 }
